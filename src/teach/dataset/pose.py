@@ -3,7 +3,9 @@
 
 from collections import OrderedDict
 
-
+# A Pose consists of x, y, z, x_rot, y_rot, z_rot
+# TODO: w.r.t what are x_rot, y_rot and z_rot measured? Is there an absolute direction?
+# The pose can be conerted *to* a dictionary, and can be converted *from* an array
 class Pose:
     def __init__(self, x, y, z, x_rot, y_rot, z_rot):
         self.x = x
@@ -29,7 +31,9 @@ class Pose:
             z_rot=pose_array[5],
         )
 
-
+# has an identity variable, a pose and an is_object boolean variable
+# it seems like the identity could be an object_id, third party camera ID, or an agent ID, or 1. 
+# TODO: find out what identity actually means- seems to be saying what the pose information is for (object, agent, camera, etc)
 class Pose_With_ID:
     def __init__(self, identity, pose, is_object=False):
         self.identity = identity
