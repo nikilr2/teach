@@ -5,7 +5,9 @@ from collections import OrderedDict
 
 from teach.dataset.pose import Pose
 
-
+# each action has an ID, a start time, a duration, an action type (always set as "Motion") and a boolean success variable
+# that tells us whether the action was successfully carried out in the simulator
+# This Action_Basic can also be converted to and from a dictionary
 class Action_Basic:
     def __init__(self, action_id, time_start, duration, success=None):
         self.action_id = action_id
@@ -32,7 +34,9 @@ class Action_Basic:
             success=action_dict["success"],
         )
 
-
+# has a pose and a pose_delta
+# A pose is  essentially a tuple (x, y, z, x_rot, y_rot, z_rot)
+# Pose delta is the tuple by which we want to change our current pose
 class Action_Motion(Action_Basic):
     def __init__(self, action_id, time_start, duration, pose, pose_delta=None, success=None):
         super().__init__(action_id=action_id, time_start=time_start, duration=duration, success=success)
@@ -65,7 +69,7 @@ class Action_Motion(Action_Basic):
             pose_delta=pose_delta,
         )
 
-
+# It has a start_x, start_y, end_x and end_y
 class Action_MapGoal(Action_Basic):
     def __init__(self, action_id, time_start, duration, start_x, start_y, end_x, end_y, success=None):
         super().__init__(action_id=action_id, time_start=time_start, duration=duration, success=success)
@@ -98,7 +102,7 @@ class Action_MapGoal(Action_Basic):
             end_y=action_dict["end_y"],
         )
 
-
+# It has x, y and oid which represents the simulator ID of he object interacted with at (x, y)
 class Action_ObjectInteraction(Action_Basic):
     def __init__(self, action_id, time_start, duration, x, y, success=None, oid=None):
         super().__init__(action_id=action_id, time_start=time_start, duration=duration, success=success)
@@ -128,7 +132,7 @@ class Action_ObjectInteraction(Action_Basic):
             oid=action_dict["oid"],
         )
 
-
+# It has no other variables
 class Action_CameraChange(Action_Basic):
     def __init__(self, action_id, time_start, duration, success=None):
         super().__init__(action_id=action_id, time_start=time_start, duration=duration, success=success)
@@ -149,7 +153,7 @@ class Action_CameraChange(Action_Basic):
             success=action_dict["success"],
         )
 
-
+# has a query variable, which is either an oid (for 'SelectOid') or a search query (for 'SearchObject')
 class Action_ProgressCheck(Action_Basic):
     def __init__(self, action_id, time_start, duration, query, success=None):
         super().__init__(action_id=action_id, time_start=time_start, duration=duration, success=success)
@@ -173,7 +177,7 @@ class Action_ProgressCheck(Action_Basic):
             success=action_dict["success"],
         )
 
-
+# has a utterance, which is probably used for communicating with the commander
 class Action_Keyboard(Action_Basic):
     def __init__(self, action_id, time_start, duration, utterance, success=None):
         super().__init__(action_id=action_id, time_start=time_start, duration=duration, success=success)
@@ -197,7 +201,8 @@ class Action_Keyboard(Action_Basic):
             utterance=action_dict["utterance"],
         )
 
-
+# this extends Action_Keyboard
+# it as a file name, so presumably the file name contains the utterance to be played
 class Action_Audio(Action_Keyboard):
     def __init__(self, action_id, time_start, duration, utterance, file_name=None, success=None):
         super().__init__(
